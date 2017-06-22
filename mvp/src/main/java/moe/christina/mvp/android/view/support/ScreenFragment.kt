@@ -1,15 +1,15 @@
-package moe.christina.mvp.android.view
+package moe.christina.mvp.android.view.support
 
 import android.os.Bundle
 import android.support.annotation.CallSuper
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import moe.christina.common.android.ObservableActivity
-import moe.christina.mvp.Screen
-import moe.christina.mvp.ScreenLifecycleEvent
+import moe.christina.common.android.support.ObservableFragment
+import moe.christina.mvp.screen.Screen
+import moe.christina.mvp.screen.ScreenLifecycleEvent
 
-abstract class ScreenActivity : ObservableActivity(),
+abstract class ScreenFragment : ObservableFragment(),
         Screen {
     override val onScreenStateChanged: Observable<ScreenLifecycleEvent>
         get() = onScreenStateChangedSubject.hide()
@@ -42,6 +42,5 @@ abstract class ScreenActivity : ObservableActivity(),
         super.onDestroy()
     }
 
-    private val onScreenStateChangedSubject: Subject<ScreenLifecycleEvent>
-            = PublishSubject.create()
+    private val onScreenStateChangedSubject: Subject<ScreenLifecycleEvent> = PublishSubject.create()
 }
