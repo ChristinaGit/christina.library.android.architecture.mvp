@@ -7,40 +7,40 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import moe.christina.common.android.support.ObservableFragment
 import moe.christina.mvp.screen.Screen
-import moe.christina.mvp.screen.ScreenLifecycleEvent
+import moe.christina.mvp.screen.Screen.LifecycleEvent
 
 abstract class ScreenFragment : ObservableFragment(),
         Screen {
-    override val onScreenStateChanged: Observable<ScreenLifecycleEvent>
+    override val onScreenStateChanged: Observable<LifecycleEvent>
         get() = onScreenStateChangedSubject.hide()
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        onScreenStateChangedSubject.onNext(ScreenLifecycleEvent.CREATE)
+        onScreenStateChangedSubject.onNext(LifecycleEvent.CREATE)
     }
 
     @CallSuper
     override fun onResume() {
         super.onResume()
 
-        onScreenStateChangedSubject.onNext(ScreenLifecycleEvent.APPEAR)
+        onScreenStateChangedSubject.onNext(LifecycleEvent.APPEAR)
     }
 
     @CallSuper
     override fun onPause() {
-        onScreenStateChangedSubject.onNext(ScreenLifecycleEvent.DISAPPEAR)
+        onScreenStateChangedSubject.onNext(LifecycleEvent.DISAPPEAR)
 
         super.onPause()
     }
 
     @CallSuper
     override fun onDestroy() {
-        onScreenStateChangedSubject.onNext(ScreenLifecycleEvent.DESTROY)
+        onScreenStateChangedSubject.onNext(LifecycleEvent.DESTROY)
 
         super.onDestroy()
     }
 
-    private val onScreenStateChangedSubject: Subject<ScreenLifecycleEvent> = PublishSubject.create()
+    private val onScreenStateChangedSubject: Subject<LifecycleEvent> = PublishSubject.create()
 }
