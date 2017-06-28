@@ -4,6 +4,7 @@ import android.support.annotation.CallSuper
 import io.reactivex.disposables.Disposable
 import moe.christina.mvp.screen.Screen
 import moe.christina.mvp.screen.Screen.LifecycleEvent
+import moe.christina.mvp.screen.Screen.LifecycleEventType
 
 abstract class BasePresenter<TScreen : Screen> : Presenter<TScreen> {
     protected var screen: TScreen? = null
@@ -70,11 +71,11 @@ abstract class BasePresenter<TScreen : Screen> : Presenter<TScreen> {
 
     private fun screenStateChangedHandler(event: LifecycleEvent) {
         val screen = screen ?: throw IllegalStateException("Screen is null")
-        when (event) {
-            LifecycleEvent.CREATE -> onScreenCreate(screen)
-            LifecycleEvent.APPEAR -> onScreenAppear(screen)
-            LifecycleEvent.DISAPPEAR -> onScreenDisappear(screen)
-            LifecycleEvent.DESTROY -> onScreenDestroy(screen)
+        when (event.type) {
+            LifecycleEventType.CREATE -> onScreenCreate(screen)
+            LifecycleEventType.APPEAR -> onScreenAppear(screen)
+            LifecycleEventType.DISAPPEAR -> onScreenDisappear(screen)
+            LifecycleEventType.DESTROY -> onScreenDestroy(screen)
         }
     }
 }

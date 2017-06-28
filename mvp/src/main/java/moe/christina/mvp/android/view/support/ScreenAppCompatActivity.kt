@@ -8,39 +8,46 @@ import io.reactivex.subjects.Subject
 import moe.christina.common.android.support.ObservableAppCompatActivity
 import moe.christina.mvp.screen.Screen
 import moe.christina.mvp.screen.Screen.LifecycleEvent
+import moe.christina.mvp.screen.Screen.LifecycleEventType
 
 abstract class ScreenAppCompatActivity : ObservableAppCompatActivity(),
         Screen {
-    override val onScreenStateChanged: Observable<LifecycleEvent>
+    override final val onScreenStateChanged: Observable<LifecycleEvent>
         get() = onScreenStateChangedSubject.hide()
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        onScreenStateChangedSubject.onNext(LifecycleEvent.CREATE)
+        riseOnScreenStateChangedEvent(LifecycleEventType.CREATE)
     }
 
     @CallSuper
     override fun onResume() {
         super.onResume()
 
-        onScreenStateChangedSubject.onNext(LifecycleEvent.APPEAR)
+        riseOnScreenStateChangedEvent(LifecycleEventType.APPEAR)
     }
 
     @CallSuper
     override fun onPause() {
-        onScreenStateChangedSubject.onNext(LifecycleEvent.DISAPPEAR)
+        riseOnScreenStateChangedEvent(LifecycleEventType.DISAPPEAR)
 
         super.onPause()
     }
 
     @CallSuper
     override fun onDestroy() {
-        onScreenStateChangedSubject.onNext(LifecycleEvent.DESTROY)
+        riseOnScreenStateChangedEvent(LifecycleEventType.DESTROY)
 
         super.onDestroy()
     }
+
+    private fun riseOnScreenStateChangedEvent(eventType: LifecycleEventType) =
+            riseOnScreenStateChangedEvent(LifecycleEvent(eventType))
+
+    private fun riseOnScreenStateChangedEvent(event: LifecycleEvent) =
+            onScreenStateChangedSubject.onNext(event)
 
     private val onScreenStateChangedSubject: Subject<LifecycleEvent> = PublishSubject.create()
 }

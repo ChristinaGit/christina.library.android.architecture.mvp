@@ -17,9 +17,7 @@ android {
 }
 
 dependencies {
-    compile project(':Common')
+    api project(':Common')
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-
-    compile "com.google.dagger:dagger:$daggerVersion"
+    api "com.google.dagger:dagger:$daggerVersion"
 }
