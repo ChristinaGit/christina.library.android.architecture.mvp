@@ -8,7 +8,7 @@ import moe.christina.common.core.Event
 open class RefreshableScreenDelegate<TData> : LoadableScreenDelegate<TData>(), RefreshableScreenBehavior<TData> {
     var refreshDataViewController: RefreshDataViewController? = null
 
-    override final val onRefreshData: Observable<Event>
+    final override  val onRefreshData: Observable<Event>
         get() = onRefreshDataSubject.hide()
 
     @CallSuper

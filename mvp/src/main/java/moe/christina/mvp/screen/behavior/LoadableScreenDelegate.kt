@@ -10,7 +10,41 @@ open class LoadableScreenDelegate<TData> : LoadableScreenBehavior<TData> {
     var loadDataViewController: LoadDataViewController? = null
     var dataConsumer: DataConsumer<TData>? = null
 
-    override final val onLoadData: Observable<Event>
+    fun setDataViewController(dataViewVisibilitySetter: (Boolean) -> Unit,
+                              noDataViewVisibilitySetter: (Boolean) -> Unit) {
+        dataViewController = object : DataViewController {
+            override fun setDataViewVisibility(visible: Boolean) =
+                dataViewVisibilitySetter(visible)
+
+            override fun setNoDataViewVisibility(visible: Boolean) =
+                noDataViewVisibilitySetter(visible)
+        }
+    }
+
+    fun setLoadDataViewController(dataLoadViewVisibilitySetter: (Boolean) -> Unit,
+                                  dataLoadErrorViewVisibilitySetter: (Boolean) -> Unit) {
+        loadDataViewController = object : LoadDataViewController {
+            override fun setDataLoadViewVisibility(visible: Boolean) =
+                dataLoadViewVisibilitySetter(visible)
+
+            override fun setDataLoadErrorViewVisibility(visible: Boolean) =
+                dataLoadErrorViewVisibilitySetter(visible)
+        }
+    }
+
+    fun setDataConsumer(hasDataPredicate: () -> Boolean,
+                        dataSetter: (TData?) -> Unit,
+                        dataEmptyPredicate: (TData?) -> Boolean) {
+        dataConsumer = object : DataConsumer<TData> {
+            override val hasData: Boolean
+                get() = hasDataPredicate()
+
+            override fun setData(data: TData?) = dataSetter(data)
+            override fun isEmpty(data: TData?) = dataEmptyPredicate(data)
+        }
+    }
+
+    final override  val onLoadData: Observable<Event>
         get() = onLoadDataSubject.hide()
 
     @CallSuper

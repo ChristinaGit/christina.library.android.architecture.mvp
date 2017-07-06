@@ -6,25 +6,25 @@ import moe.christina.mvp.screen.behavior.RefreshableScreenBehavior
 import moe.christina.mvp.screen.behavior.RefreshableScreenDelegate
 
 fun <TData> RefreshableScreenBehavior<TData>.displayRefreshDataTransformer()
-        : ObservableTransformer<TData, TData> = ObservableTransformer {
+    : ObservableTransformer<TData, TData> = ObservableTransformer {
     it.doOnSubscribe { displayRefreshDataProgress() }
-            .doOnNext { displayData(it) }
-            .doOnError { displayRefreshDataError() }
+        .doOnNext { displayData(it) }
+        .doOnError { displayRefreshDataError() }
 }
 
 fun SwipeRefreshLayout.asRefreshDataViewController(errorViewController: ((Boolean) -> Unit)? = null) =
-        object : RefreshableScreenDelegate.RefreshDataViewController {
-            override var isDataRefreshEnabled: Boolean
-                get() = isEnabled
-                set(value) {
-                    isEnabled = value
-                }
-
-            override fun setDataRefreshViewVisibility(visible: Boolean) {
-                isRefreshing = visible
+    object : RefreshableScreenDelegate.RefreshDataViewController {
+        override var isDataRefreshEnabled: Boolean
+            get() = isEnabled
+            set(value) {
+                isEnabled = value
             }
 
-            override fun setDataRefreshErrorViewVisibility(visible: Boolean) {
-                errorViewController?.invoke(visible)
-            }
+        override fun setDataRefreshViewVisibility(visible: Boolean) {
+            isRefreshing = visible
         }
+
+        override fun setDataRefreshErrorViewVisibility(visible: Boolean) {
+            errorViewController?.invoke(visible)
+        }
+    }

@@ -57,7 +57,7 @@ abstract class BasePresenter<TScreen : Screen> : Presenter<TScreen> {
 
     private fun onBindScreenInternal(screen: TScreen) {
         screenStateChangedObserver = screen.onScreenStateChanged
-                .subscribe(this::screenStateChangedHandler)
+            .subscribe(this::screenStateChangedHandler)
 
         onBindScreen(screen)
     }
