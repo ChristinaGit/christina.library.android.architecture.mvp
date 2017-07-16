@@ -7,7 +7,7 @@ interface LoadableScreenBehavior<in TData> {
     fun displayData(data: TData?)
 
     fun displayLoadDataProgress()
-    fun displayLoadDataError()
+    fun displayLoadDataError(message: String? = null)
 
     val onLoadData: Observable<Event>
 }

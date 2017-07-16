@@ -10,41 +10,7 @@ open class LoadableScreenDelegate<TData> : LoadableScreenBehavior<TData> {
     var loadDataViewController: LoadDataViewController? = null
     var dataConsumer: DataConsumer<TData>? = null
 
-    fun setDataViewController(dataViewVisibilitySetter: (Boolean) -> Unit,
-                              noDataViewVisibilitySetter: (Boolean) -> Unit) {
-        dataViewController = object : DataViewController {
-            override fun setDataViewVisibility(visible: Boolean) =
-                dataViewVisibilitySetter(visible)
-
-            override fun setNoDataViewVisibility(visible: Boolean) =
-                noDataViewVisibilitySetter(visible)
-        }
-    }
-
-    fun setLoadDataViewController(dataLoadViewVisibilitySetter: (Boolean) -> Unit,
-                                  dataLoadErrorViewVisibilitySetter: (Boolean) -> Unit) {
-        loadDataViewController = object : LoadDataViewController {
-            override fun setDataLoadViewVisibility(visible: Boolean) =
-                dataLoadViewVisibilitySetter(visible)
-
-            override fun setDataLoadErrorViewVisibility(visible: Boolean) =
-                dataLoadErrorViewVisibilitySetter(visible)
-        }
-    }
-
-    fun setDataConsumer(hasDataPredicate: () -> Boolean,
-                        dataSetter: (TData?) -> Unit,
-                        dataEmptyPredicate: (TData?) -> Boolean) {
-        dataConsumer = object : DataConsumer<TData> {
-            override val hasData: Boolean
-                get() = hasDataPredicate()
-
-            override fun setData(data: TData?) = dataSetter(data)
-            override fun isEmpty(data: TData?) = dataEmptyPredicate(data)
-        }
-    }
-
-    final override  val onLoadData: Observable<Event>
+    final override val onLoadData: Observable<Event>
         get() = onLoadDataSubject.hide()
 
     @CallSuper
@@ -74,12 +40,13 @@ open class LoadableScreenDelegate<TData> : LoadableScreenBehavior<TData> {
     }
 
     @CallSuper
-    override fun displayLoadDataError() {
+    override fun displayLoadDataError(message: String?) {
         dataViewController?.apply {
             setDataViewVisibility(false)
             setNoDataViewVisibility(false)
         }
         loadDataViewController?.apply {
+            setDataLoadErrorMessage(message)
             setDataLoadViewVisibility(false)
             setDataLoadErrorViewVisibility(true)
         }
@@ -108,17 +75,18 @@ open class LoadableScreenDelegate<TData> : LoadableScreenBehavior<TData> {
 
     interface DataViewController {
         fun setDataViewVisibility(visible: Boolean)
-        fun setNoDataViewVisibility(visible: Boolean)
+        fun setNoDataViewVisibility(visible: Boolean) {}
     }
 
     interface LoadDataViewController {
         fun setDataLoadViewVisibility(visible: Boolean)
         fun setDataLoadErrorViewVisibility(visible: Boolean)
+        fun setDataLoadErrorMessage(message: String?) {}
     }
 
     interface DataConsumer<in TData> {
         val hasData: Boolean
         fun setData(data: TData?)
-        fun isEmpty(data: TData?): Boolean
+        fun isEmpty(data: TData?): Boolean = data == null
     }
 }

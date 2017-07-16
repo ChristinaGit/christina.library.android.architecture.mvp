@@ -11,7 +11,7 @@ import moe.christina.mvp.screen.Screen.LifecycleEvent
 import moe.christina.mvp.screen.Screen.LifecycleEventType
 
 abstract class ScreenAppCompatActivity : ObservableAppCompatActivity(), Screen {
-    final override  val onScreenStateChanged: Observable<LifecycleEvent>
+    final override val onScreenStateChanged: Observable<LifecycleEvent>
         get() = onScreenStateChangedSubject.hide()
 
     @CallSuper

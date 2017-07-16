@@ -8,7 +8,7 @@ import moe.christina.common.core.Event
 open class RefreshableScreenDelegate<TData> : LoadableScreenDelegate<TData>(), RefreshableScreenBehavior<TData> {
     var refreshDataViewController: RefreshDataViewController? = null
 
-    final override  val onRefreshData: Observable<Event>
+    final override val onRefreshData: Observable<Event>
         get() = onRefreshDataSubject.hide()
 
     @CallSuper
@@ -34,8 +34,8 @@ open class RefreshableScreenDelegate<TData> : LoadableScreenDelegate<TData>(), R
     }
 
     @CallSuper
-    override fun displayLoadDataError() {
-        super.displayLoadDataError()
+    override fun displayLoadDataError(message: String?) {
+        super.displayLoadDataError(message)
 
         refreshDataViewController?.apply {
             isDataRefreshEnabled = true
@@ -53,8 +53,9 @@ open class RefreshableScreenDelegate<TData> : LoadableScreenDelegate<TData>(), R
     }
 
     @CallSuper
-    override fun displayRefreshDataError() {
+    override fun displayRefreshDataError(message: String?) {
         refreshDataViewController?.apply {
+            setDataRefreshErrorMessage(message)
             isDataRefreshEnabled = true
             setDataRefreshViewVisibility(false)
             setDataRefreshErrorViewVisibility(true)
@@ -84,5 +85,6 @@ open class RefreshableScreenDelegate<TData> : LoadableScreenDelegate<TData>(), R
         var isDataRefreshEnabled: Boolean
         fun setDataRefreshViewVisibility(visible: Boolean)
         fun setDataRefreshErrorViewVisibility(visible: Boolean)
+        fun setDataRefreshErrorMessage(message: String?) {}
     }
 }

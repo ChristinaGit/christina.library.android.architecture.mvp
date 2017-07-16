@@ -6,7 +6,7 @@ import moe.christina.common.core.Event
 interface LoadablePageScreenBehavior<in TData> : RefreshableScreenBehavior<TData> {
     fun displayDataPage(data: TData?, page: Int, lastPage: Boolean)
     fun displayLoadDataPageProgress()
-    fun displayLoadDataPageError()
+    fun displayLoadDataPageError(message: String? = null)
 
     val onLoadDataPage: Observable<ViewDataPageEvent>
 
