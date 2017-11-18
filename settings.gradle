@@ -1,1 +1,3 @@
-include ':mvp'
+include ':christina.library.architecture.mvp'
+
+project(':christina.library.architecture.mvp').projectDir = new File('christina.library.architecture.mvp')
