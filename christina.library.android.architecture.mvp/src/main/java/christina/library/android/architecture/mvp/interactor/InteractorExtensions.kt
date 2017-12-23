@@ -1,7 +1,7 @@
 package christina.library.android.architecture.mvp.interactor
 
-fun <TResult> Interactor<Unit, TResult>.execute(): TResult = execute(Unit)
+fun <Result> Interactor<Unit, Result>.execute(): Result = execute(Unit)
 
-operator fun <TArgument, TResult> Interactor<TArgument, TResult>.invoke(argument: TArgument): TResult = execute(argument)
+operator fun <Argument, Result> Interactor<Argument, Result>.invoke(argument: Argument): Result = execute(argument)
 
-operator fun <TResult> Interactor<Unit, TResult>.invoke(): TResult = execute()
+operator fun <Result> Interactor<Unit, Result>.invoke(): Result = execute()

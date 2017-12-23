@@ -2,8 +2,8 @@ package christina.library.android.architecture.mvp.presenter
 
 import android.support.annotation.CallSuper
 
-abstract class Presenter<out TScreen>(
-    protected val screen: TScreen
+abstract class Presenter<out Screen>(
+    protected val screen: Screen
 ) : ScreenObserver {
     final override fun subscribe() {
         if (subscribed) {
