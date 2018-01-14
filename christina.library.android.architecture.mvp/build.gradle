@@ -15,12 +15,11 @@ android {
         }
     }
     sourceSets {
-        main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs += "src/test/kotlin"
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
     }
 }
 
 dependencies {
     api project(':christina.library.android.common')
-    api "com.google.dagger:dagger:2.11"
 }

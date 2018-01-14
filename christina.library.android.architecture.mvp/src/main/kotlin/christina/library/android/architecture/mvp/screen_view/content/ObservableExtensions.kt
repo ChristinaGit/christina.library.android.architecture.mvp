@@ -6,12 +6,27 @@ import io.reactivex.Observable
 fun <Content> Observable<Content>.displayContent(
     screenView: ContentScreenView<Content>
 ): Observable<Content> = this
-    .doOnNext {
+    .doOnSubscribe {
         if (screenView.visible) {
             screenView.visible = false
         }
+    }
+    .doOnNext {
+        if (!screenView.visible) {
+            screenView.visible = true
+        }
 
         screenView.display(it)
+    }
+    .doOnComplete {
+        if (!screenView.visible) {
+            screenView.visible = true
+        }
+    }
+    .doOnError {
+        if (screenView.visible) {
+            screenView.visible = false
+        }
     }
 
 inline fun <T, Error> Observable<T>.displayError(
@@ -23,17 +38,36 @@ inline fun <T, Error> Observable<T>.displayError(
             screenView.visible = false
         }
     }
-    .doOnComplete {
-        if (screenView.visible) {
-            screenView.visible = false
-        }
-    }
     .doOnError {
         if (!screenView.visible) {
             screenView.visible = true
         }
 
         screenView.display(converter(it))
+    }
+
+fun <T> Observable<T>.displayInitialProgress(
+    screenView: ScreenView
+): Observable<T> = this
+    .doOnSubscribe {
+        if (!screenView.visible) {
+            screenView.visible = true
+        }
+    }
+    .doOnNext {
+        if (screenView.visible) {
+            screenView.visible = false
+        }
+    }
+    .doOnComplete {
+        if (screenView.visible) {
+            screenView.visible = false
+        }
+    }
+    .doOnError {
+        if (screenView.visible) {
+            screenView.visible = false
+        }
     }
 
 fun <T> Observable<T>.displayProgress(
@@ -55,9 +89,9 @@ fun <T> Observable<T>.displayProgress(
         }
     }
 
-inline fun <T, TProgressValue> Observable<T>.displayProgress(
-    screenView: ContentScreenView<TProgressValue>,
-    crossinline converter: (T) -> TProgressValue
+inline fun <T, Progress> Observable<T>.displayProgress(
+    screenView: ContentScreenView<Progress>,
+    crossinline converter: (T) -> Progress
 ): Observable<T> = this
     .displayProgress(screenView)
     .doOnNext {
