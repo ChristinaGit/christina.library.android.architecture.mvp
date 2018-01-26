@@ -22,4 +22,7 @@ android {
 
 dependencies {
     api project(':christina.library.android.common')
+
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.1.60'
+    testImplementation 'junit:junit:4.12'
 }
