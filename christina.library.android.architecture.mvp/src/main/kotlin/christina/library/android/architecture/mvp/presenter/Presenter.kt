@@ -11,7 +11,6 @@ abstract class Presenter<out Screen>(
         }
 
         subscribed = true
-
         onSubscribe()
     }
 
